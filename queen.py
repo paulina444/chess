@@ -1,7 +1,5 @@
 from piece import *
 from piece import Piece
-
-
 class Queen(Piece):
     def __init__(self, currentPosition, color, board):
         self.color = color
@@ -9,9 +7,6 @@ class Queen(Piece):
             super().__init__(currentPosition, "bq", board)
         else:
             super().__init__(currentPosition, "wq", board)
-
-    def getColor(self):
-        return self.color
 
     def getQueen(self):
         return self.currentPosition, self.color
@@ -21,16 +16,10 @@ class Queen(Piece):
         self.color = newColor
         return self.currentPosition, self.color
 
-    def update(self, newPosition):
-        self.currentPosition = newPosition
-        return self.currentPosition, self.color
-
     def isValidateMove(self,destination, skad):
         if super().isEmptyVertical(self.currentPosition, self.new_position) == False: #przeskakuje pionki
-            print("Twoja wierza przeskakuje pionki")
             return False
         elif super().isEmptyHorizontal(self.currentPosition, self.new_position) == False:
-            print("Twoja wierza przeskakuje pionki")
             return False
         elif super().isEmptySkosy(self.currentPosition, self.new_position) == False:
             return False
@@ -45,6 +34,7 @@ class Queen(Piece):
         self.new_position = new_position
         if self.isValidateMove(new_position, skad) == True:
             self.move_base(self.new_position)
+            return True
+        else:
+            return False
 
-    def __del__(self): #gdy bedzie bicie to bedzie trzeba zrobic del mojbishop
-        pass

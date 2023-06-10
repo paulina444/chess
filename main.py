@@ -1,4 +1,38 @@
 from game import *
+"""class Main(Game):
+    def play(self):
+        self.nextmove = None
+        while True:
+            if self.nextmove == None:
+                colorAi = "w"
+                self.whatColorAi(colorAi)
+            else:
+                colorAi = "b"
+                self.whatColorAi(colorAi)
+
+            self.moveAi()
+            #self.move()
+            self.display_board()"""
+
+game1 = Game()
+game1.creatingNewBoard()
+
+game1.play()
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
 
 
 #koniec gry kieidy:
@@ -13,46 +47,35 @@ from game import *
 
 
 
-
-#jezeli nie bedzie poprzedniego ruchu to znaczy ze ejstes bialym (mozna to wywnioskowac z interfejsu co jest na gicie)
-
-
-# 1 sprawdz co zrb w pawns
-# 2 sprawdzic bicia pawns
-# 3 spawdzic hypkiego interface
-
-# 1. rozdzielic na czarny bialy i kogo ruch
-# 2. bicia
-# 3. zobaczyc tamte metody styatyczne i czy mozna przeniesc to isEmpty vertical itd do klasy board czy cos
+"""game1 = Game("b")
+game1.creatingNewBoard()"""
+"""game1.move((6,7), (4,7))
+game1.move((4,7), (3,7))
+game1.move((6,5), (4,5))
+game1.move((6,6), (5,6))
+game1.move((6,4), (5,4))
+game1.move((6,3), (4,3))
+game1.move((6,2), (4,2))"""
 
 
-game1 = Game()
-game1.creatingNewBoard()
-game1.display_board()
-print(game1.getBialyPlayer())
+"""game1.display_board()
+game1.moveAi()
+game1.display_board()"""
 
+
+"""print(game1.getBialyPlayer())
+print("biale figury:")
 print(game1.getBialeFigury())
+print("czarne figury:")
 print(game1.getCzarneFigury())
 
+"""
 
 #print(game1.getCellFromBoard((0,0)).piece.getPiece())
 
 
 
 
-game1.move((1,0), (3,0))
-game1.move((3,0), (4,0))
-game1.move((6,1), (5,0))
-game1.move((6,7), (4,7))
-game1.move((7,7), (5,7))
-game1.move((4,0), (5,0))
-game1.move((6,1), (5,1))
-game1.move((5,1), (4,1))
-
-
-print(game1.getBialeFigury())
-print(game1.bialyPlayer.figury.update({'wq': (5,2)}))
-print(game1.getBialeFigury())
 
 
 
@@ -61,14 +84,32 @@ print(game1.getBialeFigury())
 
 
 
-game1.display_board()
 
 
-print(game1.getCellFromBoard((0,0)).getPiece().color) ##TO DAJE KOLOR
-#print(game1.getColorFromBoard((0,0)))
+"""print("XXXXXXXXXXXXx")
+game1.getCellFromBoard((2,4)).piece.checkKillsChorizontal((2,4))
+print("XXXXXXXXXXXXXXx")"""
 
 
 
+"""
+print(game1.getCellFromBoard((0,0)).getPiece().type) ##TO DAJE KOLOR
+print(game1.getCellFromBoard((0,0)).getPositon())
+print(game1.getCellFromBoard((0,0)).getEverything())
+print(game1.getCellFromBoard((0,0)).getPiece())
+
+"""
+"""#print(game1.getColorFromBoard((0,0)))
+
+print("AAAAAAAAAAAAAaaaa")
+print(game1.randomWhitePieceFromBoard())
+print("AAAAAAAAAAAAAAAAAAAAAA")
+"""
+
+
+
+#print(game1.moveAi())
+#############3game1.moveAi((0,0),(0,0))
 #game1.getCellFromBoard((1,0)).piece.move((1,0), (2,0))
 #print(type(game1.getCellFromBoard((0,0)).piece))
 """print(game1.getCellFromBoard((0,7)).getCell())
