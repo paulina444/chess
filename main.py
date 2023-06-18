@@ -1,23 +1,75 @@
 from game import *
-"""class Main(Game):
-    def play(self):
-        self.nextmove = None
-        while True:
-            if self.nextmove == None:
-                colorAi = "w"
-                self.whatColorAi(colorAi)
-            else:
-                colorAi = "b"
-                self.whatColorAi(colorAi)
-
-            self.moveAi()
-            #self.move()
-            self.display_board()"""
-
 game1 = Game()
 game1.creatingNewBoard()
+"""game1.display_board()
+game1.move((1,2),(3,2))
+game1.display_board()
 
+game1.move((6,3),(4,3))
+game1.display_board()
+game1.move((3,2),(4,3))
+game1.display_board()
+game1.move((4,3),(6,3))
+print("vdfdf")
+game1.display_board()
+
+game1.move((1,0),(2,0))
+game1.display_board()
+game1.move((2,0),(4,0))
+game1.move((2,0),(2,1))
+game1.move((4,3),(7,3))
+game1.move((4,3),(5,3))
+
+print("4")
+game1.display_board()
+
+game1.getPieceFromBoard((7,6)).remove_piece((7,6))
+game1.getPieceFromBoard((7,5)).remove_piece((7,5))
+game1.getPieceFromBoard((7,7)).remove_piece((7,7))
+game1.display_board()
+print("2")
+
+game1.move((7,4),(7,5))
+game1.move((7,5),(7,6))
+game1.move((6,4),(4,4))
+game1.move((2,0),(3,0))
+game1.move((0,0),(2,0))
+
+game1.move((2,0),(2,4))
+game1.move((1,3),(2,3))
+game1.move((4,4),(3,4))
+
+game1.move((3,4),(2,3))
+
+game1.display_board()
+game1.move((2,4),(7,4))
+game1.display_board()
+print("1")
+
+game1.move((7,4),(7,3))
+game1.display_board()
+"""
+
+
+
+
+game1.display_board()
+game1.move((6,1),(4,1))
+game1.move((4,1),(3,1))
+game1.move((3,1),(2,1))
+print(game1.getCellFromBoard((0,0)).piece.isValidateMove((0,0),(2,0)))
+print(game1.getCellFromBoard((1,0)).piece)
+print(game1.getCellFromBoard((1,0)).piece.isValidateMove((1,0),(2,1)))
+print(game1.getCellFromBoard((0,7)).piece.isValidateMove((0,7),(3,4)))
+game1.getCellFromBoard((0,7)).piece.move_base((4,3))
+print(game1.getCellFromBoard((4,3)).piece.isValidateMove((4,3),(3,4)))
+game1.getCellFromBoard((7,0)).piece.move_base((5,2))
+print(game1.getCellFromBoard((4,3)).piece.isValidateMove((4,3),(5,2)))
+
+game1.display_board()
 game1.play()
+
+
 
 
 

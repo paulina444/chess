@@ -1,7 +1,5 @@
 from piece import *
 from piece import Piece
-
-
 class Bishop(Piece):
     def __init__(self, currentPosition, color, board):
         self.color = color
@@ -18,23 +16,26 @@ class Bishop(Piece):
         self.color = newColor
         return self.currentPosition, self.color
 
-    def isValidateMove(self, destination, skad):
-        if super().isEmptySkosy(self.skad, self.new_position) == False:
-            return False
-        elif super().isValidateMove(destination, skad) == False:
-            return False
-        else:
-            return True
 
-    def move(self, skad, new_position):
-        super().move(skad, new_position)
-        self.skad = self.currentPosition
-        self.new_position = new_position
-        if self.isValidateMove(new_position, skad) == True:
-            self.move_base(self.new_position)
+    def isValidateMove(self, start, end):
+        if start[0]==end[0] or start[1]==end[1]:
+            return False
+        if super().isEmptySkosy(start, end) == False:
+            return False
+        isvalidate = super().isValidateMove(start, end)
+        if isvalidate == False:
+            return False
+        elif isvalidate == "kill":
+            return "kill"
+
+        return True
+
+    def checkKills(self, currentPosition):
+        if self.checkKillsSkosy(currentPosition) == True:
             return True
         else:
             return False
+
 
 
 

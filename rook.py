@@ -18,29 +18,32 @@ class Rook(Piece):
         self.color = newColor
         return self.currentPosition, self.color
 
-    def isValidateMove(self, destination, skad):
-        x, y = self.new_position
+    def isValidateMove(self, start, end):
+        x, y = end
         # Sprawdzenie, czy ruch jest zgodny z zasadami ruchu wieży
-        if x != self.currentPosition[0] and y != self.currentPosition[1]:
+        if x != start[0] and y != start[1]:
             return False
-        elif super().isEmptyVertical(self.currentPosition, self.new_position) == False: #przeskakuje pionki
+        elif super().isEmptyVertical(start, end) == False: #przeskakuje pionki
             return False
-        elif super().isEmptyHorizontal(self.currentPosition, self.new_position) == False:
+        elif super().isEmptyHorizontal(start, end) == False:
             return False
-        elif super().isValidateMove(destination, skad) == False:
-            return False
-        else:
-            return True
 
-    def move(self, skad, new_position):
-        super().move(skad, new_position)
-        self.skad = self.currentPosition
-        self.new_position = new_position
-        if self.isValidateMove(new_position, skad) == True:
-            self.move_base(new_position)
+        validateMove = super().isValidateMove(start, end)
+        if validateMove == False:
+            return False
+        elif validateMove == "kill":
+            return "kill"
+
+        return True
+
+    def checkKills(self, currentPosition):
+        if self.checkKillsChorizontal(currentPosition) == True:
+            return True
+        elif self.checkKillsVertical(currentPosition) == True:
             return True
         else:
             return False
+
 
 
 

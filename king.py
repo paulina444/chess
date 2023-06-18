@@ -19,22 +19,21 @@ class King(Piece):
         return self.currentPosition, self.color
 
 
-    def isValidateMove(self, destination, skad):
-        x, y = self.new_position
+    def isValidateMove(self, start, end):
+        x, y = end
         # Sprawdzenie, czy ruch jest zgodny z zasadami ruchu króla
-        if abs(x - self.currentPosition[0]) > 1 or abs(y - self.currentPosition[1]) > 1:
+        if abs(x - start[0]) > 1 or abs(y - start[1]) > 1:
             return False
-        if super().isValidateMove(destination, skad) == False:
+        isvalidate = super().isValidateMove(start, end)
+        if isvalidate == False:
             return False
-        else:
-            return True
+        elif isvalidate == "kill":
+            return "kill"
+        return True
 
-    def move(self, skad, new_position):
-        super().move(skad, new_position)
-        self.skad = self.currentPosition  # np k1.currentPosition luub self.skad = skad
-        self.new_position = new_position
-        if self.isValidateMove(new_position, skad) == True:
-            self.move_base(new_position)
+    def checkKills(self, currentPosition):
+        if self.checkKillsOneField(currentPosition) == True:
             return True
         else:
             return False
+

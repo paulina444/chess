@@ -18,9 +18,9 @@ class Knight(Piece):
         self.color = newColor
         return self.currentPosition, self.color
 
-    def validateMoveKnight(self):
-        x1, y1 = self.currentPosition
-        x, y = self.new_position
+    def validateMoveKnight(self, skad, destination):
+        x1, y1 = skad
+        x, y = destination
         if (x == x1+2 or x == x1-2) and (y == y1+1 or y == y1-1):
             return True
         elif (y == y1+2 or y == y1-2) and (x == x1+1 or x == x1-1):
@@ -28,23 +28,18 @@ class Knight(Piece):
         else:
             return False
 
-    def isValidateMove(self, destination, skad):
-        x1, y1 = self.currentPosition
-        x, y = self.new_position
-        if self.validateMoveKnight() == False:
+    def isValidateMove(self, start, end):
+        if self.validateMoveKnight(start, end) == False:
             return False
-        elif super().isValidateMove(destination, skad) == False:
+        isvalidate = super().isValidateMove(start, end)
+        if isvalidate == False:
             return False
-        else:
-            return True
+        elif isvalidate == "kill":
+            return "kill"
+        return True
 
-    def move(self, skad, new_position):
-        super().move(skad, new_position)
-        self.skad = self.currentPosition
-        self.new_position = new_position
-        if self.isValidateMove(new_position, skad) == True:
-            self.move_base(self.new_position)
+    def checkKills(self, currentPosition):
+        if self.checkKillsKnight(currentPosition) == True:
             return True
         else:
             return False
-

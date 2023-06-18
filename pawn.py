@@ -1,10 +1,6 @@
 from piece import *
 from piece import Piece
 
-# 2. gdy pionki dojda do konca planszy moga sie zamienic w inna figure
-    # nie wazne czy z zabitych czy nie z zabitych
-
-
 class Pawn(Piece):
     def __init__(self, currentPosition, color, board):
         self.color = color
@@ -21,47 +17,70 @@ class Pawn(Piece):
         self.color = newColor
         return self.currentPosition, self.color
 
-    def isValidateMove(self, destination, skad):
-        x, y = self.new_position
-        if super().is_valid_position(destination) == False:
+    def isValidateMovePawnTwoField(self, skad, dokad):
+        if dokad[0] - skad[0] == 2 and skad[0] == 1:
+            if self.is_occupied_position((skad[0] + 1,skad[1])) == False:
+                return False #przeskakuj pionek
+        elif skad[0] - dokad[0] == 2 and skad[0] == 6:
+            if self.is_occupied_position((skad[0] - 1,skad[1])) == False:
+                return False #przeskakuj pionek
+        if skad[0] == 1 and dokad[0] - skad[0] > 2:
             return False
-        #bicia
-        elif abs(x-self.currentPosition[0]) == 1 and abs(y - self.currentPosition[1]) == 1:
-            if super().getColorFromBoard(self.currentPosition) == 'b' and x-self.currentPosition[0] == 1 and super().is_occupied_position(destination)==False and super().getColorFromBoard(self.new_position) == 'w' :
-                super().remove_piece((x,y))
-                return True
-            elif super().getColorFromBoard(self.currentPosition) == 'w' and self.currentPosition[0] - x == 1 and  super().is_occupied_position(destination)==False and super().getColorFromBoard(self.new_position) == 'b':
-                super().remove_piece((x, y))
-                return True
+        if skad[0] == 6 and skad[0] - dokad[0] > 2:
+            return False
+        if abs(skad[0]- dokad[0])>2:
+            return False
+        return True
+
+    def isMoreThanOneField(self, start,end):
+        if start[0] != 6 and start[0] != 1:
+            if abs(start[0] - end[0]) > 1:
+                return False
+        return True
+
+    def isValidateDirection(self, start,end):
+        if self.color == "w" and end[0] >= start[0]:
+            return False
+        elif self.color == "b" and end[0] <= start[0]:
+            return False
+        else:
+            return True
+    def isPawnKilling(self,start, end):
+        if abs(end[0]-start[0]) == 1 and abs(end[1] - start[1]) == 1:
+            if self.color == "b" and end[0]-start[0] == 1 and self.is_occupied_position(end) == False and self.getColorFromBoard(end) == "w":
+                return "kill"
+            elif self.color == "w" and start[0] - end[0] == 1 and self.is_occupied_position(start) == False and self.getColorFromBoard(end) == "b":
+                return "kill"
             else:
                 return False
+
+
+    def isValidateMove(self, start,end):
+        x, y = end
+        if super().is_valid_position(end) == False:
+            return False
+        #bicia
+        if abs(end[0]-start[0]) == 1 and abs(end[1] - start[1]) == 1:
+            if self.isPawnKilling(start, end) == "kill":
+                return "kill"
+        if start[1]   != end[1]:
+            return False
             # Sprawdzenie, czy ruch jest zgodny z kierunkiem poruszania się pionka
-        elif self.color == "w" and x >= self.currentPosition[0]:
+        elif self.isValidateDirection(start, end) == False:
             return False
-        elif self.color == "b" and x <= self.currentPosition[0]:
+        elif self.isValidateMovePawnTwoField(start, end) == False:
             return False
-        elif (self.currentPosition[0] == 1 or self.currentPosition[0] == 6) and (abs(x - self.currentPosition[0]) > 2 or abs(y - self.currentPosition[1] != 0)):
+        elif self.isMoreThanOneField(start, end)==False:
             return False
-        elif self.currentPosition[0] != 1 and self.currentPosition[0] != 6 and (abs(x - self.currentPosition[0] > 1) or abs(y - self.currentPosition[1] != 0)):
+        elif self.is_occupied_position(end) == False:
             return False
-        elif super().is_occupied_position(destination) == False:
-            return False
-        else:
-            return True
-        """elif self.color == "w" and self.currentPosition[0] == 0:
-                    self.remove_piece(skad)
-                elif self.color == "b" and self.currentPosition[0] == 7:
-                    self.remove_piece(skad)"""
 
-    def move(self, skad, new_position):
-        super().move(skad, new_position)
-        self.skad = self.currentPosition
-        self.new_position = new_position
-        if self.isValidateMove(new_position, skad) == True:
-            self.move_base(self.new_position)
+        return True
+
+    def checkKills(self, currentPosition):
+        if self.checkKillsOneFieldSkosy(currentPosition) == True:
             return True
         else:
             return False
 
-    def __del__(self): #gdy bedzie bicie to bedzie trzeba zrobic del mojbishop
-        pass
+

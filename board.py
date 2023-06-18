@@ -33,8 +33,6 @@ class Board:
         x, y = position
         self.szachownica[x][y].setCell(x, y, piece)
 
-
-
     def display_board(self):
         print("   A  B  C  D  E  F  G  H ")
         for i, row in enumerate(self.szachownica):
@@ -53,7 +51,7 @@ class Board:
         szachownica = self.szachownica
         self.bialyPlayer = Player("white")
         self.czarnyPlayer = Player("black")
-
+        #dopisac AI
 
         #stworzenie biszopow
         self.b1 = Bishop((0, 2), "b", szachownica)
@@ -179,6 +177,7 @@ class Board:
         self.bialyPlayer.addFigury(self.r3)
         self.bialyPlayer.addFigury(self.r4)
 
+
     def getBialeFigury(self):
         return self.bialyPlayer.getPlayer()
 
@@ -209,33 +208,33 @@ class Board:
         return self.bialyPlayer
 
     def fromLetterToNumbers(self, argument):
-        match argument:
-            case "A":
-                return 0
-            case "B":
-                return 1
-            case "C":
-                return 2
-            case "D":
-                return 3
-            case "E":
-                return 4
-            case "F":
-                return 5
-            case "G":
-                return 6
-            case "H":
-                return 7
+        letter_to_number = {
+            "A": 0,
+            "B": 1,
+            "C": 2,
+            "D": 3,
+            "E": 4,
+            "F": 5,
+            "G": 6,
+            "H": 7,
+            "a": 0,
+            "b": 1,
+            "c": 2,
+            "d": 3,
+            "e": 4,
+            "f": 5,
+            "g": 6,
+            "h": 7
+        }
+
+        for letter, number in letter_to_number.items():
+            if letter == argument:
+                return number
 
     def convertToBoard(self, destination):
         secondChar = self.fromLetterToNumbers(destination[0])
         firstChar = abs(int(destination[1])-8)
         return firstChar, secondChar
-
-
-
-        #zrob taka samo funkcje w druga strone ze np z (0,0) na a8
-
 
     def randomWhitePieceFromBoard(self):
         whitePieces = self.bialyPlayer.figury

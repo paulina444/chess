@@ -16,24 +16,26 @@ class Queen(Piece):
         self.color = newColor
         return self.currentPosition, self.color
 
-    def isValidateMove(self,destination, skad):
-        if super().isEmptyVertical(self.currentPosition, self.new_position) == False: #przeskakuje pionki
+    def isValidateMove(self,start, end):
+        if super().isEmptyVertical(start, end) == False: #przeskakuje pionki
             return False
-        elif super().isEmptyHorizontal(self.currentPosition, self.new_position) == False:
+        elif super().isEmptyHorizontal(start, end) == False:
             return False
-        elif super().isEmptySkosy(self.currentPosition, self.new_position) == False:
+        elif super().isEmptySkosy(start, end) == False:
             return False
-        elif super().isValidateMove(destination, skad) == False:
+        isvalidate = super().isValidateMove(start, end)
+        if isvalidate == False:
             return False
-        else:
-            return True
+        elif isvalidate == "kill":
+            return "kill"
+        return True
 
-    def move(self, skad, new_position):
-        super().move(skad, new_position)
-        self.skad = self.currentPosition
-        self.new_position = new_position
-        if self.isValidateMove(new_position, skad) == True:
-            self.move_base(self.new_position)
+    def checkKills(self, currentPosition):
+        if self.checkKillsChorizontal(currentPosition) == True:
+            return True
+        elif self.checkKillsVertical(currentPosition) == True:
+            return True
+        elif self.checkKillsSkosy(currentPosition) == True:
             return True
         else:
             return False
