@@ -16,9 +16,9 @@ class Piece:
 
     def move_base(self, destination):
         current_position = self.currentPosition
-        self.remove_piece(current_position)  # Usunięcie pionka z poprzedniej pozycji
-        self.currentPosition = destination  # Ustawienie nowej pozycji pionka
-        self.place_piece(self, destination)  # Wstawienie pionka na nową pozycję
+        self.removePiece(current_position)
+        self.currentPosition = destination
+        self.placePiece(self, destination)
 
     def move(self, skad, new_position):
         self.skad = self.currentPosition
@@ -28,99 +28,94 @@ class Piece:
             self.move_base(self.new_position)
             return True
         elif isvalidate == "kill":
-            self.remove_piece(self.new_position)
+            self.removePiece(self.new_position)
             self.move_base(self.new_position)
             return "kill"
         else:
             return False
 
-    def moveAi(self):
-        pass
     def getCellFromBoard(self, position):
         x, y = position
         return self.board[x][y]
 
     def getColorFromBoard(self, position):
         x, y = position
-        if self.getCellFromBoard((x,y)).getPiece() is None:
-            print("None nie ma tam pionka")
+        if self.getCellFromBoard((x, y)).getPiece() is None:
             return False
-        return self.getCellFromBoard((x,y)).getPiece().color
+        return self.getCellFromBoard((x, y)).getPiece().color
 
     def getPieceFromBoard(self, position):
         x, y = position
         return self.getCellFromBoard((x, y)).getPiece()
 
     def isValidateMove(self, start, end):
-        szachownica = self.board
         self.end = end
         x,y = end
         x1, y1 = start
-        if self.is_valid_position(end) == False: #ruch poza plansza
+        if self.isOutOfBoard(end) == False:
             return False
-        elif self.is_occupied_position(end) == False: #tutaj jest szachowanie
+        elif self.isOccupiedPosition(end) == False:
             if self.getColorFromBoard((x,y)) != self.getColorFromBoard((x1,y1)):
-                #self.remove_piece((x,y))
                 return "kill"
             else:
                 return False
         else:
             return True
 
-    def isEmptySkosy(self, currentPosition, new_position):
+    def isEmptyDiagonal(self, currentPosition, new_position):
         x, y = new_position
         x1, y1 = currentPosition
         length_x = abs(x1 - x)
         length_y = abs(y1 - y)
 
-        if x1 > x and y1 < y:  # od dolu na pawo
+        if x1 > x and y1 < y:
             if length_y != length_x:
                 return False
             for i in range(x1 - length_x + 1, x1):
-                pozycja = i, y - 1
+                position = i, y - 1
                 y = y - 1
-                if self.is_valid_position(pozycja) == True:
-                    if self.is_occupied_position(pozycja) == True:
+                if self.isOutOfBoard(position) == True:
+                    if self.isOccupiedPosition(position) == True:
                         continue
                     else:
                         return False
                 else:
                     return False
-        elif x1 > x and y1 > y:  # od dolu na lewo
+        elif x1 > x and y1 > y:
             if length_y != length_x:
                 return False
             y1 = y1 - length_x
             for i in range(x1 - length_x + 1, x1):
-                pozycja = i, y1 + 1
+                position = i, y1 + 1
                 y1 = y1 + 1
-                if self.is_valid_position(pozycja) == True:
-                    if self.is_occupied_position(pozycja) == True:
+                if self.isOutOfBoard(position) == True:
+                    if self.isOccupiedPosition(position) == True:
                         continue
                     else:
                         return False
                 else:
                     return False
-        elif x1 < x and y1 > y:  # skos od gory do dolu lewy
-            if length_y != length_x: # gdy nie jest to ruch po przekatnej
+        elif x1 < x and y1 > y:
+            if length_y != length_x:
                 return False
             for i in range(x1 + 1, x):
                 y1 = y1 - 1
-                pozycja = i, y1
-                if self.is_valid_position(pozycja) == True:
-                    if self.is_occupied_position(pozycja) == True:
+                position = i, y1
+                if self.isOutOfBoard(position) == True:
+                    if self.isOccupiedPosition(position) == True:
                         continue
                     else:
                         return False
                 else:
                     return False
-        elif x1 < x and y1 < y:  # skos do dolu w prawo
+        elif x1 < x and y1 < y:
             if length_y != length_x:
                 return False
             for i in range(x1 + 1, x):
                 y1 = y1 + 1
-                pozycja = i, y1
-                if self.is_valid_position(pozycja) == True:
-                    if self.is_occupied_position(pozycja) == True:
+                position = i, y1
+                if self.isOutOfBoard(position) == True:
+                    if self.isOccupiedPosition(position) == True:
                         continue
                     else:
                         return False
@@ -128,27 +123,26 @@ class Piece:
                     return False
         return True
 
-    def isEmptyVertical(self, currentPosition, new_position):  # czy nie pionkow w pionieprzeskakuje w pionie
+    def isEmptyVertical(self, currentPosition, new_position):
         x, y = new_position
         x1, y1 = currentPosition
         how_many = abs(x1 - x)
-        # jesli czarny
         if x1 < x:
             for i in range(x1 + 1, x1 + how_many):
-                pozycja = i, y
-                if self.is_valid_position(pozycja) == True:
-                    if self.is_occupied_position(pozycja) == True:
-                        continue  # pusta
+                position = i, y
+                if self.isOutOfBoard(position) == True:
+                    if self.isOccupiedPosition(position) == True:
+                        continue
                     else:
                         return False
                 else:
                     return False
         else:
             for i in range(x1+ 1 - how_many, x1):
-                pozycja = i, y
-                if self.is_valid_position(pozycja) == True:
-                    if self.is_occupied_position(pozycja) == True:
-                        continue  # pusta
+                position = i, y
+                if self.isOutOfBoard(position) == True:
+                    if self.isOccupiedPosition(position) == True:
+                        continue
                     else:
                         return False
                 else:
@@ -161,20 +155,20 @@ class Piece:
         how_many = abs(y1 - y)
         if y1 < y:
             for i in range(y1 + 1, y1 + how_many):
-                pozycja = x, i
-                if self.is_valid_position(pozycja) == True:
-                    if self.is_occupied_position(pozycja) == True:
-                        continue  # pusta
+                position = x, i
+                if self.isOutOfBoard(position) == True:
+                    if self.isOccupiedPosition(position) == True:
+                        continue
                     else:
                         return False
                 else:
                     return False
         else:
             for i in range(y1 - how_many + 1, y1):
-                pozycja = x, i
-                if self.is_valid_position(pozycja) == True:
-                    if self.is_occupied_position(pozycja) == True:
-                        continue  # pusta
+                position = x, i
+                if self.isOutOfBoard(position) == True:
+                    if self.isOccupiedPosition(position) == True:
+                        continue
                     else:
                         return False
                 else:
@@ -186,108 +180,103 @@ class Piece:
 
     def checkKillsVertical(self, currentPosition):
         x1, y1 = currentPosition
-        # Sprawdź 7 pozycje do gory
         for i in range(1, 8):
             position = x1+i, y1
-            if self.is_valid_position(position) == False: #jesli  wychodzi poza plansze
+            if self.isOutOfBoard(position) == False:
                 break
-            if self.is_occupied_position(position) == False:#jesli jest okupowana
+            if self.isOccupiedPosition(position) == False:
                 if self.move(currentPosition, position) == "kill":
                     return True
                 else:
                     break
-        #w dol
         for i in range(1, 8):
             position = x1-i, y1
-            if self.is_valid_position(position) == False: #jesli wychodzi poza plansze
+            if self.isOutOfBoard(position) == False:
                 break
-            if self.is_occupied_position(position) == False:#jesli jest okupowana
+            if self.isOccupiedPosition(position) == False:
                 if self.move(currentPosition, position) == "kill":
                     return True
                 else:
                     break
-        return False #-nie ma killow
+        return False
 
     def checkKillsChorizontal(self, currentPosition):
         x1, y1 = currentPosition
-        # Sprawdź 7 pozycje w prawo
         for i in range(1, 8):
             position = x1, y1 + i
-            if self.is_valid_position(position) == False:  # jesli  wychodzi poza plansze
+            if self.isOutOfBoard(position) == False:
                 break
-            if self.is_occupied_position(position) == False:  # jesli jest okupowana
+            if self.isOccupiedPosition(position) == False:
                 if self.move(currentPosition, position) == "kill":
-                    return True  # no bo zabilo
+                    return True
                 else:
                     break
-        # w lewo
         for i in range(1, 8):
             position = x1, y1 - i
-            if self.is_valid_position(position) == False:  # jesli wychodzi poza plansze
+            if self.isOutOfBoard(position) == False:
                 break
-            if self.is_occupied_position(position) == False:  # jesli jest okupowana
+            if self.isOccupiedPosition(position) == False:
                 if self.move(currentPosition, position) == "kill":
                     return True
                 else:
                     break
-        return False  # -nie ma killow
+        return False
 
-    def checkKillsSkosy(self, currentPosition):
+    def checkKillsDiagonal(self, currentPosition):
         x1, y1 = currentPosition
-        #trzeba kazdy skos sprawdzic
-        for i in range(1, 8): #skos od lewy gora do prawy dol
+        for i in range(1, 8):
             position = x1+i, y1+i
-            if self.is_valid_position(position) == False:  # jesli wychodzi poza plansz
+            if self.isOutOfBoard(position) == False:
                 break
-            if self.is_occupied_position(position) == False:  # jesli jest okupowana
+            if self.isOccupiedPosition(position) == False:
                 if self.move(currentPosition, position) == "kill":
                     return True
                 else:
                     break
 
-        for i in range(1, 8): #skos prawy goa do lewy dol
+        for i in range(1, 8):
             position = x1+i, y1-i
-            if self.is_valid_position(position) == False:  # jesli wychodzi poza plansz
+            if self.isOutOfBoard(position) == False:
                 break
-            if self.is_occupied_position(position) == False:  # jesli jest okupowana
+            if self.isOccupiedPosition(position) == False:
                 if self.move(currentPosition, position) == "kill":
                     return True
                 else:
                     break
-        for i in range(1, 8): #skos lewy dol do prawy gora
+
+        for i in range(1, 8):
             position = x1-i, y1+i
-            if self.is_valid_position(position) == False:  # jesli wychodzi poza plansz
+            if self.isOutOfBoard(position) == False:
                 break
-            if self.is_occupied_position(position) == False:  # jesli jest okupowana
+            if self.isOccupiedPosition(position) == False:
                 if self.move(currentPosition, position) == "kill":
                     return True
                 else:
                     break
 
-        for i in range(1, 8): #skos prawy dol do lewa gora
+        for i in range(1, 8):
             position = x1-i, y1-i
-            if self.is_valid_position(position) == False:  # jesli wychodzi poza plansz
+            if self.isOutOfBoard(position) == False:
                 break
-            if self.is_occupied_position(position) == False:  # jesli jest okupowana
+            if self.isOccupiedPosition(position) == False:
                 if self.move(currentPosition, position) == "kill":
                     return True
                 else:
                     break
-
         return False
 
     def checkKillsOneField(self, currentPosition):
         x1, y1 = currentPosition
-        position = x1+1, y1
+        position = x1 + 1, y1
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
         position = x1 + 1, y1 + 1
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
-        position = x1 -1, y1
+        position = x1 - 1, y1
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
-        position = x1-1, y1-1
+        position = x1 - 1, y1 - 1
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
         position = x1, y1 + 1
@@ -304,59 +293,58 @@ class Piece:
             return True
         return False
 
-    def checkKillsOneFieldSkosy(self, currentPosition):
+    def checkKillsOneFieldDiagonal(self, currentPosition):
         x1, y1 = currentPosition
         if self.getColorFromBoard(currentPosition) == "w":
-            position = x1-1, y1+1
+            position = x1 - 1, y1 + 1
             if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
                 return True
-            position = x1 - 1, y1-1
+            position = x1 - 1, y1 - 1
             if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
                 return True
             return False
         else:
-            position = x1+1, y1-1
-
+            position = x1 + 1, y1 - 1
             if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
                 return True
-            position = x1+1, y1+1
+            position = x1 + 1, y1 + 1
             if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
                 return True
             return False
 
     def checkKillsKnight(self, currentPosition):
         x1, y1 = currentPosition
-        position = x1+2, y1-1
+        position = x1 + 2, y1 - 1
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
-        position = x1+2, y1+1
+        position = x1 + 2, y1 + 1
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
-        position = x1-2, y1+1
+        position = x1 - 2, y1 + 1
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
-        position = x1-2, y1-1
+        position = x1 - 2, y1 - 1
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
-        position = x1+1, y1-2
+        position = x1 + 1, y1 - 2
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
-        position = x1-1, y1-2
+        position = x1 - 1, y1 - 2
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
-        position = x1-1, y1+2
+        position = x1 - 1, y1 + 2
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
-        position =x1+1, y1+2
+        position = x1 + 1, y1 + 2
         if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
             return True
         return False
 
     def ifOutOfBoardAndIsValidPositionAndMove(self, position, currentPosition):
-        if self.is_valid_position(position) == False:  # jesli  wychodzi poza plansze
+        if self.isOutOfBoard(position) == False:
             return False
         else:
-            if self.is_occupied_position(position) == False:  # jesli jest okupowana czyli moze uda sie zabic jesli jest to przeciwnik
+            if self.isOccupiedPosition(position) == False:
                 move = self.move(currentPosition, position)
                 if move == True or move == "kill":
                     return True
@@ -365,19 +353,18 @@ class Piece:
             else:
                 return False
 
-    # sprawdza czy nie wychodzi poza plansze
-    def is_valid_position(self, position):
+    def isOutOfBoard(self, position):
         x, y = position
         if x < 0 or x >= 8 or y < 0 or y >= 8:
             return False
         else:
             return True
 
-    def is_occupied_position(self,position):
+    def isOccupiedPosition(self,position):
         x, y = position
-        szachownica = self.board
-        cell = szachownica[x][y]
-        if self.is_valid_position(position)==True:
+        chessboard = self.board
+        cell = chessboard[x][y]
+        if self.isOutOfBoard(position)==True:
             if cell.piece is None:
                 return True
             else:
@@ -385,25 +372,10 @@ class Piece:
         else:
             return False
 
-
-    def place_piece(self, piece, position):
+    def placePiece(self, piece, position):
         x, y = position
-        szachownica = self.board
         self.board[x][y].setCell(x, y, piece)
 
-    def remove_piece(self, position):
+    def removePiece(self, position):
         x, y = position
         self.board[x][y].setCell(x, y, None)
-
-
-
-
-
-
-
-
-
-
-
-
-

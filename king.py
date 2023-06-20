@@ -1,6 +1,4 @@
-from piece import *
 from piece import Piece
-
 
 class King(Piece):
     def __init__(self, currentPosition, color, board):
@@ -18,10 +16,8 @@ class King(Piece):
         self.color = newColor
         return self.currentPosition, self.color
 
-
     def isValidateMove(self, start, end):
         x, y = end
-        # Sprawdzenie, czy ruch jest zgodny z zasadami ruchu króla
         if abs(x - start[0]) > 1 or abs(y - start[1]) > 1:
             return False
         isvalidate = super().isValidateMove(start, end)

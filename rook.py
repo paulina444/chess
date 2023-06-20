@@ -20,10 +20,9 @@ class Rook(Piece):
 
     def isValidateMove(self, start, end):
         x, y = end
-        # Sprawdzenie, czy ruch jest zgodny z zasadami ruchu wieży
         if x != start[0] and y != start[1]:
             return False
-        elif super().isEmptyVertical(start, end) == False: #przeskakuje pionki
+        elif super().isEmptyVertical(start, end) == False:
             return False
         elif super().isEmptyHorizontal(start, end) == False:
             return False

@@ -16,22 +16,20 @@ class Bishop(Piece):
         self.color = newColor
         return self.currentPosition, self.color
 
-
     def isValidateMove(self, start, end):
-        if start[0]==end[0] or start[1]==end[1]:
+        if start[0] == end[0] or start[1] == end[1]:
             return False
-        if super().isEmptySkosy(start, end) == False:
+        if super().isEmptyDiagonal(start, end) == False:
             return False
         isvalidate = super().isValidateMove(start, end)
         if isvalidate == False:
             return False
         elif isvalidate == "kill":
             return "kill"
-
         return True
 
     def checkKills(self, currentPosition):
-        if self.checkKillsSkosy(currentPosition) == True:
+        if self.checkKillsDiagonal(currentPosition) == True:
             return True
         else:
             return False

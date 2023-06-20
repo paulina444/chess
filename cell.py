@@ -7,8 +7,6 @@ class Cell:
     def getCell(self):
         return self.x, self.y, self.piece
 
-
-
     def getPositon(self):
         return self.x, self.y
 

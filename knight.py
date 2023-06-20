@@ -1,6 +1,4 @@
-from piece import *
 from piece import Piece
-
 
 class Knight(Piece):
     def __init__(self, currentPosition, color, board):
@@ -18,9 +16,9 @@ class Knight(Piece):
         self.color = newColor
         return self.currentPosition, self.color
 
-    def validateMoveKnight(self, skad, destination):
-        x1, y1 = skad
-        x, y = destination
+    def validateMoveKnight(self, start, end):
+        x1, y1 = start
+        x, y = end
         if (x == x1+2 or x == x1-2) and (y == y1+1 or y == y1-1):
             return True
         elif (y == y1+2 or y == y1-2) and (x == x1+1 or x == x1-1):
