@@ -1,5 +1,4 @@
 from game import *
-
 class Ai(Game):
     def generateRandomMoveVerticalAndHorizontal(self):
         howManyField = random.randint(1, 7)
@@ -221,7 +220,7 @@ class Ai(Game):
                 return True
             return False
         elif direction == 7:
-            destination = x1 -1, y1 + 2
+            destination = x1 - 1, y1 + 2
             if self.moveAndIsUnderAttackKing(start, destination) == True:
                 return True
             return False

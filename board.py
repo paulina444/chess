@@ -29,7 +29,7 @@ class Board:
         piece = cell.getPiece()
         return piece
 
-    def placePiece(self, piece, position): #ustawia pionki
+    def placePiece(self, piece, position):
         x, y = position
         self.chessboard[x][y].setCell(x, y, piece)
 
@@ -188,8 +188,6 @@ class Board:
         self.blackPlayer.addFigury(self.r2)
         self.whitePlayer.addFigury(self.r3)
         self.whitePlayer.addFigury(self.r4)
-
-
 
     def removeFromListWhitePieces(self, position):
         x = self.getPieceFromBoard(position)

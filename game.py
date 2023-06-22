@@ -3,7 +3,6 @@ from cell import *
 import random
 class Game(Board):
     def __init__(self):
-        #self.color = color
         super().__init__()
 
     def getGame(self):
@@ -64,7 +63,6 @@ class Game(Board):
                 color = self.getColorFromBoard(end)
             myColor = self.getColorFromBoard(start)
             move = self.getCellFromBoard(start).piece.move(start, end)
-            #tutaj ze po movie jesli king jest pod biciem... to
             if self.isKingUnderAttack(myColor) == True:
 
                 if self.getCellFromBoard(end).getPiece().type == "wp":

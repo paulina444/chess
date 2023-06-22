@@ -1,5 +1,4 @@
 from piece import Piece
-
 class Player:
     def __init__(self, kolor):
         self.figury = []
