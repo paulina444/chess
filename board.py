@@ -33,6 +33,10 @@ class Board:
         x, y = position
         self.chessboard[x][y].setCell(x, y, piece)
 
+    def removePiece(self, position):
+        x, y = position
+        self.chessboard[x][y].setCell(x, y, None)
+
     def displayBoard(self):
         print("   A  B  C  D  E  F  G  H ")
         for i, row in enumerate(self.chessboard):

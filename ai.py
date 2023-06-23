@@ -5,177 +5,61 @@ class Ai(Game):
         direction = random.randint(1, 4)
         x1, y1 = self.randomPiece.currentPosition
         start = self.randomPiece.currentPosition
-        if direction == 1:
-            destination = x1 + howManyField, y1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 2:
-            destination = x1 - howManyField, y1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 3:
-            destination = x1, y1 + howManyField
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 4:
-            destination = x1, y1 - howManyField
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
 
-    def genarateRandomMoveSkosy(self):
+        if direction == 1:
+            self.destination = x1 + howManyField, y1
+        elif direction == 2:
+            self.destination = x1 - howManyField, y1
+        elif direction == 3:
+            self.destination = x1, y1 + howManyField
+        elif direction == 4:
+            self.destination = x1, y1 - howManyField
+
+        if self.randomPiece.move(self.randomPiece.currentPosition, self.destination) == True:
+            if self.isKingUnderAttack(self.colorAi) == True:
+                self.getCellFromBoard(self.destination).piece.move_base(start)
+                return False
+            else:
+                return True
+        else:
+            return False
+
+    def genarateRandomMoveDiagonal(self):
         howManyField = random.randint(1, 7)
         direction = random.randint(1, 4)
         x1, y1 = self.randomPiece.currentPosition
         start = self.randomPiece.currentPosition
-        if direction == 1:
-            destination = x1 + howManyField, y1 + howManyField
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
+        directions = [(1, 1), (-1, 1), (1, -1), (-1, -1)]
+
+        destination = x1 + directions[direction - 1][0] * howManyField, y1 + directions[direction - 1][1] * howManyField
+        if self.randomPiece.move(self.randomPiece.currentPosition, destination) == True:
+            if self.isKingUnderAttack(self.colorAi) == True:
+                self.getCellFromBoard(destination).piece.move_base(start)
                 return False
-        elif direction == 2:
-            destination = x1 - howManyField, y1 + howManyField
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
             else:
-                return False
-        elif direction == 3:
-            destination = x1 + howManyField, y1 - howManyField
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 4:
-            destination = x1 - howManyField, y1 - howManyField
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
+                return True
+        else:
+            return False
 
     def generateMoveToKing(self):
         direction = random.randint(1, 8)
         x1, y1 = self.randomPiece.currentPosition
         start = self.randomPiece.currentPosition
-        if direction == 1:
-            destination = x1+1, y1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
+        directions = [(1, 0), (1, 1), (1, -1), (0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1)]
+
+        for i in range(8):
+            if direction == i + 1:
+                destination = x1 + directions[i][0], y1 + directions[i][1]
+                if self.randomPiece.move(self.randomPiece.currentPosition, destination) == True:
+                    if self.isKingUnderAttack(self.colorAi) == True:
+                        self.getCellFromBoard(destination).piece.move_base(start)
+                        return False
+                    else:
+                        return True
                 else:
-                    return True
-            else:
-                return False
-        elif direction == 2:
-            destination = x1+1, y1+1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
                     return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 3:
-            destination = x1+1, y1-1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 4:
-            destination = x1, y1-1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 5:
-            destination = x1-1, y1-1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 6:
-            destination = x1-1, y1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 7:
-            destination = x1-1, y1+1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
-        elif direction == 8:
-            destination = x1, y1+1
-            if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
-                if self.isKingUnderAttack(self.colorAi) == True:
-                    self.getCellFromBoard(destination).piece.move_base(start)
-                    return False
-                else:
-                    return True
-            else:
-                return False
+        return False
+
     def moveAndIsUnderAttackKing(self,start ,destination):
         if self.randomPiece.move((self.randomPiece.currentPosition), (destination)) == True:
             if self.isKingUnderAttack(self.colorAi) == True:
@@ -185,50 +69,20 @@ class Ai(Game):
                 return True
         else:
             return False
+
     def generateMoveToKnight(self):
         direction = random.randint(1, 8)
         x1, y1 = self.randomPiece.currentPosition
         start = self.randomPiece.currentPosition
-        if direction == 1:
-            destination = x1 + 2, y1 - 1
-            if self.moveAndIsUnderAttackKing(start,destination) == True:
-                return True
-            return False
-        elif direction == 2:
-            destination = x1 + 2, y1 + 1
-            if self.moveAndIsUnderAttackKing(start, destination) == True:
-                return True
-            return False
-        elif direction == 3:
-            destination = x1 - 2, y1 + 1
-            if self.moveAndIsUnderAttackKing(start, destination) == True:
-                return True
-            return False
-        elif direction == 4:
-            destination = x1 - 2, y1 - 1
-            if self.moveAndIsUnderAttackKing(start, destination) == True:
-                return True
-            return False
-        elif direction == 5:
-            destination = x1 + 1, y1 - 2
-            if self.moveAndIsUnderAttackKing(start, destination) == True:
-                return True
-            return False
-        elif direction == 6:
-            destination = x1-1, y1 - 2
-            if self.moveAndIsUnderAttackKing(start, destination) == True:
-                return True
-            return False
-        elif direction == 7:
-            destination = x1 - 1, y1 + 2
-            if self.moveAndIsUnderAttackKing(start, destination) == True:
-                return True
-            return False
-        elif direction == 8:
-            destination = x1+1, y1 + 2
-            if self.moveAndIsUnderAttackKing(start, destination) == True:
-                return True
-            return False
+        directions = [(2, -1), (2, 1), (-2, 1), (-2, -1), (1, -2), (-1, -2), (-1, 2), (1, 2)]
+
+        for i in range(8):
+            if direction == i + 1:
+                destination = x1 + directions[i][0], y1 + directions[i][1]
+                if self.moveAndIsUnderAttackKing(start, destination) == True:
+                    return True
+                return False
+        return False
 
     def generateMoveToPawn(self,piece):
         x, y = self.randomPiece.currentPosition
@@ -289,7 +143,7 @@ class Ai(Game):
 
     def moveAi(self):
         if self.colorAi == "w":
-            self.Pieces=self.whitePlayer.figury
+            self.Pieces = self.whitePlayer.figury
             self.opponent = "b"
             randomPiece = self.randomWhitePieceFromBoard()
             self.randomPiece = randomPiece
@@ -324,8 +178,8 @@ class Ai(Game):
             else:
                 self.moveAi()
         elif randomPiece.type[1] == "b":
-            if self.genarateRandomMoveSkosy() == True:
-                print("robie move")
+            if self.genarateRandomMoveDiagonal() == True:
+                print("robie ruch")
                 if self.isOpponentMated(self.opponent) == True:
                     print("MAT I KONIEC GRY")
                     quit()
@@ -333,8 +187,8 @@ class Ai(Game):
             else:
                 self.moveAi()
         elif randomPiece.type[1] == "q":
-            if self.genarateRandomMoveSkosy() == True or self.generateRandomMoveVerticalAndHorizontal() == True:
-                print("robie move")
+            if self.genarateRandomMoveDiagonal() == True or self.generateRandomMoveVerticalAndHorizontal() == True:
+                print("robie ruch")
                 if self.isOpponentMated(self.opponent) == True:
                     print("MAT I KONIEC GRY")
                     quit()
@@ -343,7 +197,7 @@ class Ai(Game):
                 self.moveAi()
         elif randomPiece.type[1] == "k":
             if self.generateMoveToKing() == True:
-                print("robie move")
+                print("robie ruch")
                 if self.isOpponentMated(self.opponent) == True:
                     print("MAT I KONIEC GRY")
                     quit()
@@ -352,7 +206,7 @@ class Ai(Game):
                 self.moveAi()
         elif randomPiece.type[1] == "p":
             if self.generateMoveToPawn(randomPiece) == True:
-                print("robie move")
+                print("robie ruch")
                 if self.isOpponentMated(self.opponent) == True:
                     print("MAT I KONIEC GRY")
                     quit()
@@ -361,7 +215,7 @@ class Ai(Game):
                 self.moveAi()
         elif randomPiece.type[1] == "n":
             if self.generateMoveToKnight()==True:
-                print("robie move")
+                print("robie ruch")
                 if self.isOpponentMated(self.opponent) == True:
                     print("MAT I KONIEC GRY")
                     quit()

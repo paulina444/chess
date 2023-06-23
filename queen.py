@@ -1,5 +1,4 @@
 from piece import Piece
-
 class Queen(Piece):
     def __init__(self, currentPosition, color, board):
         self.color = color
@@ -11,15 +10,13 @@ class Queen(Piece):
     def getQueen(self):
         return self.currentPosition, self.color
 
-    def setQueen(self, newPosition, newColor):
+    def setQueen(self, newPosition):
         self.currentPosition = newPosition
-        self.color = newColor
+
         return self.currentPosition, self.color
 
     def isValidateMove(self, start, end):
-        if super().isEmptyVertical(start, end) == False:
-            return False
-        elif super().isEmptyHorizontal(start, end) == False:
+        if super().isEmptyVerticalAndChorizontal(start, end) == False:
             return False
         elif super().isEmptyDiagonal(start, end) == False:
             return False
@@ -31,9 +28,7 @@ class Queen(Piece):
         return True
 
     def checkKills(self, currentPosition):
-        if self.checkKillsChorizontal(currentPosition) == True:
-            return True
-        elif self.checkKillsVertical(currentPosition) == True:
+        if self.checkKillsChorizontalandVertical(currentPosition) == True:
             return True
         elif self.checkKillsDiagonal(currentPosition) == True:
             return True

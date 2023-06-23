@@ -11,10 +11,9 @@ class Knight(Piece):
     def getKnight(self):
         return self.currentPosition, self.color
 
-    def setKnight(self, newPosition, newColor):
+    def setKnight(self, newPosition):
         self.currentPosition = newPosition
-        self.color = newColor
-        return self.currentPosition, self.color
+        return self.currentPosition
 
     def validateMoveKnight(self, start, end):
         x1, y1 = start

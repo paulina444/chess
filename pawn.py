@@ -12,10 +12,9 @@ class Pawn(Piece):
     def getPawn(self):
         return self.currentPosition, self.color
 
-    def setPawn(self, newPosition, newColor):
+    def setPawn(self, newPosition):
         self.currentPosition = newPosition
-        self.color = newColor
-        return self.currentPosition, self.color
+        return self.currentPosition
 
     def isValidateMovePawnTwoField(self, start, end):
         if end[0] - start[0] == 2 and start[0] == 1:
@@ -55,7 +54,7 @@ class Pawn(Piece):
                 return False
 
     def isValidateMove(self, start, end):
-        if super().isOutOfBoard(end) == False:
+        if super().isOutOfBoard(end) == True:
             return False
         if abs(end[0]-start[0]) == 1 and abs(end[1] - start[1]) == 1:
             if self.isPawnKilling(start, end) == "kill":

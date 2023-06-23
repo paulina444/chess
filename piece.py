@@ -20,16 +20,16 @@ class Piece:
         self.currentPosition = destination
         self.placePiece(self, destination)
 
-    def move(self, skad, new_position):
-        self.skad = self.currentPosition
-        self.new_position = new_position
-        isvalidate = self.isValidateMove(skad,new_position)
+    def move(self, start, end):
+        self.start = self.currentPosition
+        self.end = end
+        isvalidate = self.isValidateMove(start,end)
         if isvalidate == True:
-            self.move_base(self.new_position)
+            self.move_base(self.end)
             return True
         elif isvalidate == "kill":
-            self.removePiece(self.new_position)
-            self.move_base(self.new_position)
+            self.removePiece(self.end)
+            self.move_base(self.end)
             return "kill"
         else:
             return False
@@ -52,7 +52,7 @@ class Piece:
         self.end = end
         x,y = end
         x1, y1 = start
-        if self.isOutOfBoard(end) == False:
+        if self.isOutOfBoard(end) == True:
             return False
         elif self.isOccupiedPosition(end) == False:
             if self.getColorFromBoard((x,y)) != self.getColorFromBoard((x1,y1)):
@@ -62,291 +62,121 @@ class Piece:
         else:
             return True
 
-    def isEmptyDiagonal(self, currentPosition, new_position):
-        x, y = new_position
+    def isEmptyVerticalAndChorizontal(self, currentPosition, newPosition):
         x1, y1 = currentPosition
-        length_x = abs(x1 - x)
-        length_y = abs(y1 - y)
-
-        if x1 > x and y1 < y:
-            if length_y != length_x:
-                return False
-            for i in range(x1 - length_x + 1, x1):
-                position = i, y - 1
-                y = y - 1
-                if self.isOutOfBoard(position) == True:
-                    if self.isOccupiedPosition(position) == True:
-                        continue
-                    else:
-                        return False
-                else:
+        x2, y2 = newPosition
+        if x1 == x2:
+            direction = 1 if y2 > y1 else -1
+            for i in range(y1 + direction, y2, direction):
+                position = x1, i
+                if self.isOccupiedPosition(position) == False:
                     return False
-        elif x1 > x and y1 > y:
-            if length_y != length_x:
-                return False
-            y1 = y1 - length_x
-            for i in range(x1 - length_x + 1, x1):
-                position = i, y1 + 1
-                y1 = y1 + 1
-                if self.isOutOfBoard(position) == True:
-                    if self.isOccupiedPosition(position) == True:
-                        continue
-                    else:
-                        return False
-                else:
-                    return False
-        elif x1 < x and y1 > y:
-            if length_y != length_x:
-                return False
-            for i in range(x1 + 1, x):
-                y1 = y1 - 1
+        elif y1 == y2:
+            direction = 1 if x2 > x1 else -1
+            for i in range(x1 + direction, x2, direction):
                 position = i, y1
-                if self.isOutOfBoard(position) == True:
-                    if self.isOccupiedPosition(position) == True:
-                        continue
-                    else:
-                        return False
-                else:
-                    return False
-        elif x1 < x and y1 < y:
-            if length_y != length_x:
-                return False
-            for i in range(x1 + 1, x):
-                y1 = y1 + 1
-                position = i, y1
-                if self.isOutOfBoard(position) == True:
-                    if self.isOccupiedPosition(position) == True:
-                        continue
-                    else:
-                        return False
-                else:
+                if self.isOccupiedPosition(position) == False:
                     return False
         return True
 
-    def isEmptyVertical(self, currentPosition, new_position):
-        x, y = new_position
+    def isEmptyDiagonal(self, currentPosition, newPosition):
         x1, y1 = currentPosition
-        how_many = abs(x1 - x)
-        if x1 < x:
-            for i in range(x1 + 1, x1 + how_many):
-                position = i, y
-                if self.isOutOfBoard(position) == True:
-                    if self.isOccupiedPosition(position) == True:
-                        continue
-                    else:
-                        return False
-                else:
-                    return False
-        else:
-            for i in range(x1+ 1 - how_many, x1):
-                position = i, y
-                if self.isOutOfBoard(position) == True:
-                    if self.isOccupiedPosition(position) == True:
-                        continue
-                    else:
-                        return False
-                else:
-                    return False
-        return True
+        x2, y2 = newPosition
+        length_x = abs(x1 - x2)
+        length_y = abs(y1 - y2)
+        if x1 != x2 and y1 != y2:
+            if length_x != length_y:
+                return False
 
-    def isEmptyHorizontal(self, currentPosition, new_position):
-        x, y = new_position
-        x1, y1 = currentPosition
-        how_many = abs(y1 - y)
-        if y1 < y:
-            for i in range(y1 + 1, y1 + how_many):
-                position = x, i
-                if self.isOutOfBoard(position) == True:
-                    if self.isOccupiedPosition(position) == True:
-                        continue
-                    else:
-                        return False
-                else:
+            dx = 1 if x2 > x1 else -1
+            dy = 1 if y2 > y1 else -1
+            x = x1 + dx
+            y = y1 + dy
+
+            while (x != x2) and (y != y2):
+                position = x, y
+                if self.isOutOfBoard(position) == True or self.isOccupiedPosition(position) == False:
                     return False
-        else:
-            for i in range(y1 - how_many + 1, y1):
-                position = x, i
-                if self.isOutOfBoard(position) == True:
-                    if self.isOccupiedPosition(position) == True:
-                        continue
-                    else:
-                        return False
-                else:
-                    return False
+                x += dx
+                y += dy
         return True
 
     def checkKills(self, currentPosition):
         pass
 
-    def checkKillsVertical(self, currentPosition):
+    def checkKillsChorizontalandVertical(self, currentPosition):
         x1, y1 = currentPosition
-        for i in range(1, 8):
-            position = x1+i, y1
-            if self.isOutOfBoard(position) == False:
-                break
-            if self.isOccupiedPosition(position) == False:
-                if self.move(currentPosition, position) == "kill":
-                    return True
-                else:
-                    break
-        for i in range(1, 8):
-            position = x1-i, y1
-            if self.isOutOfBoard(position) == False:
-                break
-            if self.isOccupiedPosition(position) == False:
-                if self.move(currentPosition, position) == "kill":
-                    return True
-                else:
-                    break
-        return False
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-    def checkKillsChorizontal(self, currentPosition):
-        x1, y1 = currentPosition
-        for i in range(1, 8):
-            position = x1, y1 + i
-            if self.isOutOfBoard(position) == False:
-                break
-            if self.isOccupiedPosition(position) == False:
-                if self.move(currentPosition, position) == "kill":
-                    return True
-                else:
+        for direction in directions:
+            dx, dy = direction
+            i = 1
+            while True:
+                position = x1 + i * dx, y1 + i * dy
+                if self.isOutOfBoard(position) == True:
                     break
-        for i in range(1, 8):
-            position = x1, y1 - i
-            if self.isOutOfBoard(position) == False:
-                break
-            if self.isOccupiedPosition(position) == False:
-                if self.move(currentPosition, position) == "kill":
-                    return True
-                else:
+                if self.isOccupiedPosition(position) == False:
+                    if self.move(currentPosition, position) == "kill":
+                        return True
                     break
+                i += 1
         return False
 
     def checkKillsDiagonal(self, currentPosition):
         x1, y1 = currentPosition
-        for i in range(1, 8):
-            position = x1+i, y1+i
-            if self.isOutOfBoard(position) == False:
-                break
-            if self.isOccupiedPosition(position) == False:
-                if self.move(currentPosition, position) == "kill":
-                    return True
-                else:
-                    break
+        directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 
-        for i in range(1, 8):
-            position = x1+i, y1-i
-            if self.isOutOfBoard(position) == False:
-                break
-            if self.isOccupiedPosition(position) == False:
-                if self.move(currentPosition, position) == "kill":
-                    return True
-                else:
+        for direction in directions:
+            dx, dy = direction
+            for i in range(1, 8):
+                position = x1 + i * dx, y1 + i * dy
+                if self.isOutOfBoard(position) == True:
                     break
-
-        for i in range(1, 8):
-            position = x1-i, y1+i
-            if self.isOutOfBoard(position) == False:
-                break
-            if self.isOccupiedPosition(position) == False:
-                if self.move(currentPosition, position) == "kill":
-                    return True
-                else:
-                    break
-
-        for i in range(1, 8):
-            position = x1-i, y1-i
-            if self.isOutOfBoard(position) == False:
-                break
-            if self.isOccupiedPosition(position) == False:
-                if self.move(currentPosition, position) == "kill":
-                    return True
-                else:
+                if self.isOccupiedPosition(position) == False:
+                    if self.move(currentPosition, position) == "kill":
+                        return True
                     break
         return False
 
     def checkKillsOneField(self, currentPosition):
         x1, y1 = currentPosition
-        position = x1 + 1, y1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 + 1, y1 + 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 - 1, y1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 - 1, y1 - 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1, y1 + 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1, y1 - 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 - 1, y1 + 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 + 1, y1 - 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
+        moves = [(1, 0), (1, 1), (-1, 0), (-1, -1), (0, 1), (0, -1), (-1, 1), (1, -1)]
+
+        for move in moves:
+            position = x1 + move[0], y1 + move[1]
+            if self.ifOutOfBoardAndIsValidPositionAndKill(position, currentPosition) == True:
+                return True
         return False
 
     def checkKillsOneFieldDiagonal(self, currentPosition):
         x1, y1 = currentPosition
-        if self.getColorFromBoard(currentPosition) == "w":
-            position = x1 - 1, y1 + 1
-            if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-                return True
-            position = x1 - 1, y1 - 1
-            if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-                return True
-            return False
+        color = self.getColorFromBoard(currentPosition)
+        if color == "w":
+            diagonal_moves = [(-1, 1), (-1, -1)]
         else:
-            position = x1 + 1, y1 - 1
-            if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
+            diagonal_moves = [(1, -1), (1, 1)]
+        for move in diagonal_moves:
+            position = x1 + move[0], y1 + move[1]
+            if self.ifOutOfBoardAndIsValidPositionAndKill(position, currentPosition) == True:
                 return True
-            position = x1 + 1, y1 + 1
-            if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-                return True
-            return False
+        return False
 
     def checkKillsKnight(self, currentPosition):
         x1, y1 = currentPosition
-        position = x1 + 2, y1 - 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 + 2, y1 + 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 - 2, y1 + 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 - 2, y1 - 1
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 + 1, y1 - 2
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 - 1, y1 - 2
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 - 1, y1 + 2
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
-        position = x1 + 1, y1 + 2
-        if self.ifOutOfBoardAndIsValidPositionAndMove(position, currentPosition) == True:
-            return True
+        knight_moves = [(2, -1), (2, 1), (-2, 1), (-2, -1), (1, -2), (-1, -2), (-1, 2), (1, 2)]
+        for move in knight_moves:
+            position = x1 + move[0], y1 + move[1]
+            if self.ifOutOfBoardAndIsValidPositionAndKill(position, currentPosition) == True:
+                return True
         return False
 
-    def ifOutOfBoardAndIsValidPositionAndMove(self, position, currentPosition):
-        if self.isOutOfBoard(position) == False:
+    def ifOutOfBoardAndIsValidPositionAndKill(self, position, currentPosition):
+        if self.isOutOfBoard(position) == True:
             return False
         else:
             if self.isOccupiedPosition(position) == False:
                 move = self.move(currentPosition, position)
-                if move == True or move == "kill":
+                if move == "kill":
                     return True
                 else:
                     return False
@@ -356,15 +186,15 @@ class Piece:
     def isOutOfBoard(self, position):
         x, y = position
         if x < 0 or x >= 8 or y < 0 or y >= 8:
-            return False
-        else:
             return True
+        else:
+            return False
 
     def isOccupiedPosition(self,position):
         x, y = position
         chessboard = self.board
-        cell = chessboard[x][y]
-        if self.isOutOfBoard(position)==True:
+        if self.isOutOfBoard(position) == False:
+            cell = chessboard[x][y]
             if cell.piece is None:
                 return True
             else:

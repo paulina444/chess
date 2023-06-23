@@ -13,20 +13,16 @@ class Rook(Piece):
     def getRook(self):
         return self.currentPosition, self.color
 
-    def setRook(self, newPosition, newColor):
+    def setRook(self, newPosition):
         self.currentPosition = newPosition
-        self.color = newColor
-        return self.currentPosition, self.color
+        return self.currentPosition
 
     def isValidateMove(self, start, end):
         x, y = end
         if x != start[0] and y != start[1]:
             return False
-        elif super().isEmptyVertical(start, end) == False:
+        elif super().isEmptyVerticalAndChorizontal(start, end) == False:
             return False
-        elif super().isEmptyHorizontal(start, end) == False:
-            return False
-
         validateMove = super().isValidateMove(start, end)
         if validateMove == False:
             return False
@@ -36,9 +32,7 @@ class Rook(Piece):
         return True
 
     def checkKills(self, currentPosition):
-        if self.checkKillsChorizontal(currentPosition) == True:
-            return True
-        elif self.checkKillsVertical(currentPosition) == True:
+        if self.checkKillsChorizontalandVertical(currentPosition) == True:
             return True
         else:
             return False

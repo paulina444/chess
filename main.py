@@ -19,7 +19,7 @@ class Main(Ai):
 
             if self.move(x, y) == False:
                 while True:
-                    print("zly move musisz podac jeszcze raz")
+                    print("zly ruch musisz podac jeszcze raz")
                     move = input()
                     start, end = move.split('-')
                     x = self.convertToBoard(start)
@@ -27,8 +27,11 @@ class Main(Ai):
                     move = self.move(x, y)
                     if move == True or move == "kill":
                         break
+            self.displayBoard()
             self.moveAi()
 
 game1 = Main()
 game1.creatingNewBoard()
 game1.play()
+
+

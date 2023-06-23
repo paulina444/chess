@@ -10,10 +10,9 @@ class Bishop(Piece):
     def getBishop(self):
         return self.currentPosition, self.color
 
-    def setBishop(self, newPosition, newColor):
+    def setBishop(self, newPosition):
         self.currentPosition = newPosition
-        self.color = newColor
-        return self.currentPosition, self.color
+        return self.currentPosition
 
     def isValidateMove(self, start, end):
         if start[0] == end[0] or start[1] == end[1]:

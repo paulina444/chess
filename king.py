@@ -1,5 +1,4 @@
 from piece import Piece
-
 class King(Piece):
     def __init__(self, currentPosition, color, board):
         self.color = color
@@ -11,10 +10,9 @@ class King(Piece):
     def getKing(self):
         return self.currentPosition, self.color
 
-    def setKing(self, newPosition, newColor):
+    def setKing(self, newPosition):
         self.currentPosition = newPosition
-        self.color = newColor
-        return self.currentPosition, self.color
+        return self.currentPosition
 
     def isValidateMove(self, start, end):
         x, y = end
